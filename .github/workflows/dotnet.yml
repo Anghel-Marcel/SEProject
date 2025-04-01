@@ -11,7 +11,9 @@ on:
 
 jobs:
   build:
-
+    defaults:
+      run:
+      working-directory: ./SEProject
     runs-on: ubuntu-latest
 
     steps:
