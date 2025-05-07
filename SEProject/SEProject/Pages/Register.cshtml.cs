@@ -1,71 +1,57 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SEProject.Data;
-using SEProject.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SEProject.Models; 
+using System.Security.Cryptography;
+using System.Text;
 
-
-namespace SEProject.Pages.Identity.Account
+namespace SEProject.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public RegisterModel(
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            ApplicationDbContext context)
+        public RegisterModel(ApplicationDbContext context)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
         }
 
         [BindProperty]
-        public string Email { get; set; }
+        public InputModel Input { get; set; }
 
-        [BindProperty]
-        public string Password { get; set; }
+        public string Message { get; set; }
 
-        [BindProperty]
-        public int PoliceStationId { get; set; }
-
-        public List<PoliceStation> PoliceStations { get; set; }
+        public class InputModel
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
 
         public void OnGet()
         {
-            PoliceStations = _context.PoliceStations.ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            if (!ModelState.IsValid) return Page();
-
-            var user = new AppUser
+            if (_context.Users.Any(u => u.Username == Input.Username))
             {
-                UserName = Email,
-                Email = Email,
-                PoliceStationId = PoliceStationId
+                Message = "Username already taken.";
+                return Page();
+            }
+
+            var hashed = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(Input.Password)));
+
+            var user = new User
+            {
+                Username = Input.Username,
+                Password = hashed
             };
 
-            var result = await _userManager.CreateAsync(user, Password);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToPage("/ViewClassifiedFiles");
-            }
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return Page();
+            Message = "Registration successful! You can now log in.";
+            return RedirectToPage("Login");
         }
     }
 }
