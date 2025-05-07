@@ -1,0 +1,16 @@
+﻿@page
+@model SEProject.Pages.CreatePoliceStationModel
+@{
+    ViewData["Title"] = "Adăugare Secție de Poliție";
+}
+
+<h3>Adăugare Secție de Poliție</h3>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Name">Nume Secție:</label>
+        <input type="text" class="form-control" id="Name" name="Name" required />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Adaugă Secție</button>
+</form>

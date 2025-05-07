@@ -1,9 +1,31 @@
 ﻿@page
-@model SEProject.Pages.RegisterModel
+@model SEProject.Pages.Identity.Account.RegisterModel
 @{
-	ViewData["Title"] = "Register";
+    ViewData["Title"] = "Înregistrare Utilizator";
 }
 
+<h3>Înregistrare Utilizator</h3>
 
-<h2>Register</h2>
-<p>This is the Register page.</p>
+<form method="post">
+    <div class="form-group mb-3">
+        <label>Email:</label>
+        <input type="email" class="form-control" asp-for="Email" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Parolă:</label>
+        <input type="password" class="form-control" asp-for="Password" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Secție de Poliție:</label>
+        <select class="form-control" asp-for="PoliceStationId">
+            @foreach (var station in Model.PoliceStations)
+            {
+                <option value="@station.Id">@station.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Înregistrează-te</button>
+</form>

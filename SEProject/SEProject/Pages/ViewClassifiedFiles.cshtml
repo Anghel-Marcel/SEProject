@@ -1,0 +1,67 @@
+﻿@page
+@model SEProject.Pages.ViewClassifiedFilesModel
+@{
+    ViewData["Title"] = "Fișiere Clasificate";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<!-- 🔎 Formular de căutare -->
+<form method="get" class="form-inline mb-4">
+    <select name="SearchBy" class="form-control mr-2">
+        <option value="FileName" selected>Nume Fișier</option>
+        <option value="Description">Descriere</option>
+        <option value="Category">Categorie</option>
+    </select>
+
+    <input type="text" name="SearchTerm" class="form-control mr-2" placeholder="Introdu termenul de căutare..." value="@Model.SearchTerm" />
+
+    <button type="submit" class="btn btn-primary">🔍 Caută</button>
+    <a class="btn btn-secondary ml-2" href="/ViewClassifiedFiles">🔄 Resetează</a>
+
+    <!-- 🔎 Buton pentru a crea un fișier nou -->
+    <a class="btn btn-success ml-2" href="/CreateClassifiedFile">➕ Adaugă Fișier</a>
+</form>
+
+<!-- 🔎 Tabel de fișiere -->
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Nume Fișier</th>
+            <th>Descriere</th>
+            <th>Categorie</th>
+            <th>Data Upload</th>
+            <th>Acțiuni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in Model.ClassifiedFiles)
+        {
+            <tr>
+                <td>@file.FileName</td>
+                <td>@file.Description</td>
+                <td>@file.Category</td>
+                <td>@file.UploadDate.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="/ViewClassifiedFiles?handler=Download&id=@file.Id">Descarcă</a>
+
+                    @if (file.FileName.EndsWith(".pdf") || file.FileName.EndsWith(".jpg") || file.FileName.EndsWith(".png"))
+                    {
+                        <a class="btn btn-secondary btn-sm" href="/uploads/@file.FileName" target="_blank">Vizualizează</a>
+                    }
+
+                    <a class="btn btn-warning btn-sm" href="/EditClassifiedFile?id=@file.Id">✏️ Editează</a>
+
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@file.Id" style="display:inline-block;">
+                        <button type="submit" class="btn btn-danger btn-sm">Șterge</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
