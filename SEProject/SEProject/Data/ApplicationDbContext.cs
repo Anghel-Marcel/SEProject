@@ -9,5 +9,7 @@ namespace SEProject.Data
 
         public DbSet<ClassifiedFile> ClassifiedFiles { get; set; }
         public DbSet<PoliceStation> PoliceStations { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

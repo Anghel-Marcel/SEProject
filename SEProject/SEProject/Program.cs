@@ -4,12 +4,14 @@ using SEProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddRazorPages();
+
 // 🔥 1️⃣ Configurare baza de date
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔥 2️⃣ Adăugare Razor Pages
-builder.Services.AddRazorPages();
+
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -24,6 +26,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthorization();
 
 app.MapRazorPages();
