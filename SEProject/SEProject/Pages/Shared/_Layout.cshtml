@@ -1,44 +1,90 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@{
     Layout = null;
 }
+
+@inject SEProject.Data.ApplicationDbContext _context
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Police Inspectorate</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
         .navbar {
             background-color: #007bff;
-            padding: 10px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
         }
-        .navbar a {
-            color: white;
-            margin-right: 15px;
-            text-decoration: none;
+
+        .navbar-brand {
+            font-weight: bold;
         }
-        .content { padding: 20px; }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .badge-section {
+            background-color: #ffc107;
+            color: black;
+            margin-left: 10px;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div>
-            <a href="/" style="font-weight: bold; margin-right: 25px;">Police Inspectorate</a>
-            <a href="/">Home</a>
-            <a href="/Conference">Conference</a>
-            <a href="/ClassifiedFiles">Classified Files</a>
-            <a href="/Users">Users</a>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Police Inspectorate</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Conference">Conference</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ViewClassifiedFiles">Classified Files</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Users">Users</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div>
-            <a href="/Login">Login</a>
-            <a href="/Register">Register</a>
-        </div>
-    </div>
-    <div class="content">
+    </nav>
+
+
+    <div class="container content">
         @RenderBody()
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
