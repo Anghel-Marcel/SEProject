@@ -1,19 +1,20 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SEProject.DataAccess.EF;
-using SEProject.DataAccess.Model; 
-using System.Security.Cryptography;
-using System.Text;
+using SEProject.DataAccess.Model;
+using System.Threading.Tasks;
 
 namespace SEProject.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public RegisterModel(ApplicationDbContext context)
+        public RegisterModel(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [BindProperty]
@@ -27,31 +28,23 @@ namespace SEProject.Pages
             public string Password { get; set; }
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnPostAsync()
         {
-        }
+            var user = new AppUser { UserName = Input.Username };
+            var result = await _userManager.CreateAsync(user, Input.Password);
 
-        public IActionResult OnPost()
-        {
-            if (_context.Users.Any(u => u.Username == Input.Username))
+            if (result.Succeeded)
             {
-                Message = "Username already taken.";
-                return Page();
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToPage("/Index");
             }
 
-            var hashed = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(Input.Password)));
-
-            var user = new User
+            foreach (var error in result.Errors)
             {
-                Username = Input.Username,
-                Password = hashed
-            };
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            Message = "Registration successful! You can now log in.";
-            return RedirectToPage("Login");
+            return Page();
         }
     }
 }
