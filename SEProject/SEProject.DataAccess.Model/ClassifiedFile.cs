@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SEProject.Models
+namespace SEProject.DataAccess.Model
 {
     public class ClassifiedFile
     {

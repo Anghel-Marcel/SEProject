@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-namespace SEProject.Models
+namespace SEProject.DataAccess.Model    
 {
     public class PoliceStation
     {

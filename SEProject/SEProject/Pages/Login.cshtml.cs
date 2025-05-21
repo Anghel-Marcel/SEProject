@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SEProject.Data;
+using SEProject.DataAccess.EF;
 using System.Security.Cryptography;
 using System.Text;
 

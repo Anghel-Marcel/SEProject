@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SEProject.Models;
+using SEProject.DataAccess.Model;
 
-namespace SEProject.Data
+namespace SEProject.DataAccess.EF
 {
     public class ApplicationDbContext : DbContext
     {
